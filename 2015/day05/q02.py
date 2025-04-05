@@ -10,6 +10,7 @@ input = p.input_data.splitlines()
 
 total_nice_strings = 0
 
+# one pass
 for line in input:
     has_pair = False
     has_double = False
@@ -17,14 +18,15 @@ for line in input:
     double_index = set()
     possible_double.add(line[0]+line[1])
     if line[0] == line[1]:
-        double_index.add(1)
+        double_index.add(0)
     for i in range(2, len(line)):
         if line[i-2] == line[i]:
             has_pair = True
         if line[i-1]+line[i] in possible_double and i-1 not in double_index:
             has_double = True
-        if line[i-1] == line[i]:
-            double_index.add(i-1)
+        if line[i-1] == line[i] and i not in double_index:
+            double_index.add(i)
+        possible_double.add(line[i-1]+line[i])
 
     if has_pair and has_double:
         total_nice_strings += 1
