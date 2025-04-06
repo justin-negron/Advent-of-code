@@ -8,25 +8,22 @@ from aocd.models import Puzzle
 p = Puzzle(day=6, year=2015)
 input = p.input_data.splitlines()
 
+power = {'on': 1, 'off': 0}
 grid = [[0 for _ in range(1000)] for _ in range(1000)]
 
 def toggle(start, end):
-    for i in range(start[0], end[0]):
-        for j in range(start[1], end[1]):
+    for i in range(start[0], end[0]+1):
+        for j in range(start[1], end[1]+1):
             grid[i][j] ^= 1
 
-def on(start, end):
-    for i in range(start[0], end[0]):
-        for j in range(start[1], end[1]):
-            grid[i][j] = 1
-
-def off(start, end):
-    for i in range(start[0], end[0]):
-        for j in range(start[1], end[1]):
-            grid[i][j] = 0
+def onoff(start, end, instr):
+    for i in range(start[0], end[0]+1):
+        for j in range(start[1], end[1]+1):
+            grid[i][j] = power[instr]
 
 for line in input:
     instr = line.split(" ")
+
     # toggle
     if(len(instr) == 4):
         start = [int(x) for x in instr[1].split(',')]
@@ -36,11 +33,6 @@ for line in input:
     else:
         start = [int(x) for x in instr[2].split(',')]
         end = [int(x) for x in instr[4].split(',')]
-        if instr[1] == "on":
-            print(start, end)
-            on(start, end)
-        elif instr[1] == "off":
-            off(start, end)
+        onoff(start, end, instr[1])
 
-# print(sum(row.count(1) for row in grid))
 p.answer_a = sum(row.count(1) for row in grid)
