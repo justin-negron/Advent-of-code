@@ -20,7 +20,6 @@ def encode(line):
             enc_len += 1
     return enc_len+2
     
-
 for line in input:
     total_literals += len(line)
     total_enc_literals += encode(line)
