@@ -3,41 +3,34 @@
 https://adventofcode.com/2015/day/9
 """
 from aocd.models import Puzzle
-import sys
-
+from itertools import permutations
 
 p = Puzzle(day=9, year=2015)
 input = p.input_data.splitlines()
 
-input = """London to Dublin = 464
-London to Belfast = 518
-Dublin to Belfast = 141""".splitlines()
+def find_shortest_path(distances, cities):
+    shortest = float('inf')
+    for route in permutations(cities):
+        distance = sum(distances[route[i]][route[i+1]] for i in range(len(route)-1))
+        shortest = min(shortest, distance)
+    return shortest
 
-paths = dict()
-visit = set()
-seen = set()
+def parse_input(input):
+    distances = {}
+    cities = set()
+    for line in input:
+        city1, to, city2, eq, dist = line.split()
+        dist = int(dist)
+        if city1 not in distances:
+            distances[city1] = {}
+        if city2 not in distances:
+            distances[city2] = {}
+        distances[city1][city2] = dist
+        distances[city2][city1] = dist
+        cities.update([city1, city2])
+    return distances, cities
 
-for line in input:
-    line = line.split(" ")
-    depart = line[0]
-    dest = line[2]
-    dist = line[4]
-    paths[depart] = (dest, int(dist))
-    visit.update([depart, dest])
+distances, cities = parse_input(input)
+shortest = find_shortest_path(distances, cities)
 
-shortest = sys.maxsize
-
-for place in visit:
-    if place in paths:
-        sum = paths[place][1]
-        check = place
-        while check in paths:
-            check, dist = paths[check]
-            sum += dist
-        
-        shortest = min(shortest, sum)
-    seen.add(place)
-
-
-
-# p.answer_a = 
+p.answer_a = shortest
