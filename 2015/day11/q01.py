@@ -3,12 +3,11 @@
 https://adventofcode.com/2015/day/11
 """
 from aocd.models import Puzzle
+import time
 
 
 p = Puzzle(day=11, year=2015)
 input = p.input_data
-
-input = "abcdefgh"
     
 def increasing(password: str) -> bool:
     inc_count = 0
@@ -32,16 +31,15 @@ def not_allowed(password: str) -> bool:
     return True
 
 def non_overlap(password: str) -> bool:
-    confirmed = set()
-    possible = set()
+    pair = set()
+    prev = ""
     for char in password:
-        if char in confirmed:
-            pass
-        elif char in possible:
-            confirmed.add(char)
+        if char == prev:
+            pair.add(char)
+            prev = ""
         else:
-            possible.add(char)
-        if len(confirmed) > 1:
+            prev = char
+        if len(pair) > 1:
             return True
     return False
 
@@ -53,19 +51,7 @@ def increment(password: str) -> str:
     
     return password[:index] + chr(ord(password[index])+1) + "a" * (len(password)-1-index)
 
+while not (increasing(input) and not_allowed(input) and non_overlap(input)):
+    input = increment(input)
 
-print(increasing(input))
-print(not_allowed(input))
-print(non_overlap(input))
-
-new_password = ""
-while not increasing(input) and not non_overlap(input) and not increment(input):
-    new_password = increment(input)
-    print(increment)
-
-print(new_password)
-
-
-
-
-# p.answer_a = 
+p.answer_a = input
