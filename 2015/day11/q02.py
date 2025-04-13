@@ -54,5 +54,10 @@ def increment(password: str) -> str:
 while not (increasing(input) and not_allowed(input) and non_overlap(input)):
     input = increment(input)
 
+# expired again
+input = increment(input)
 
-# p.answer_b = 
+while not (increasing(input) and not_allowed(input) and non_overlap(input)):
+    input = increment(input)
+
+p.answer_b = input
