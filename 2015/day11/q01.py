@@ -8,7 +8,7 @@ from aocd.models import Puzzle
 p = Puzzle(day=11, year=2015)
 input = p.input_data
 
-input = "testzz"
+input = "abcdefgh"
     
 def increasing(password: str) -> bool:
     inc_count = 0
@@ -48,19 +48,22 @@ def non_overlap(password: str) -> bool:
 def increment(password: str) -> str:
     index = len(password)-1
 
-    if password[index] == 'z':
+    while password[index] == 'z':
         index -= 1
     
-    next_itr = password[:index] + chr(ord(password[index])+1) if ord(password[len(password)-1])+1 < 123 else password[:index] + chr(ord(password[index])+1) + "a"
-    return next_itr
+    return password[:index] + chr(ord(password[index])+1) + "a" * (len(password)-1-index)
 
 
 print(increasing(input))
 print(not_allowed(input))
 print(non_overlap(input))
 
+new_password = ""
+while not increasing(input) and not non_overlap(input) and not increment(input):
+    new_password = increment(input)
+    print(increment)
 
-print(increment(input))
+print(new_password)
 
 
 
